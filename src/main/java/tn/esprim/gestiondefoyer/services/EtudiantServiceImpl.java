@@ -1,7 +1,6 @@
 package tn.esprim.gestiondefoyer.services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprim.gestiondefoyer.entities.Etudiant;
 import tn.esprim.gestiondefoyer.repositories.EtudiantRepository;
@@ -11,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class EtudiantServiceImpl implements IEtudiantService {
-    @Autowired
+
     private EtudiantRepository etudiantRepository;
 
     @Override
@@ -21,7 +20,8 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
     @Override
     public Etudiant retrieveEtudiant(Long etudiantId) {
-        return etudiantRepository.findById(etudiantId).get();
+        return etudiantRepository.findById(etudiantId)
+                .orElseThrow(() -> new RuntimeException("Étudiant introuvable : " + etudiantId));
     }
 
     @Override

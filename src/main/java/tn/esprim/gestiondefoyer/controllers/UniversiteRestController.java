@@ -1,18 +1,18 @@
 package tn.esprim.gestiondefoyer.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprim.gestiondefoyer.entities.Universite;
-import tn.esprim.gestiondefoyer.services.UniversiteServiceImpl;
+import tn.esprim.gestiondefoyer.services.IUniversiteService;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/universite")
 public class UniversiteRestController {
 
-    @Autowired
-    private UniversiteServiceImpl universiteService;
+    private IUniversiteService universiteService;
 
     @GetMapping("/retrieve-all-universites")
     public List<Universite> getUniversites() {
@@ -41,14 +41,12 @@ public class UniversiteRestController {
 
     @PutMapping("/affecterFoyer/{idFoyer}/{nomUniversite}")
     public Universite affecterFoyerAUniversite(@PathVariable("idFoyer") Long idFoyer,
-                                               @PathVariable("nomUniversite") String nomUniversite){
-        Universite universite=universiteService.affecterFoyerAUniversite(idFoyer, nomUniversite);
-        return universite;
+                                               @PathVariable("nomUniversite") String nomUniversite) {
+        return universiteService.affecterFoyerAUniversite(idFoyer, nomUniversite);
     }
 
     @PutMapping("/desaffecterFoyer/{idUniversite}")
     public Universite desaffecterFoyerAUniversite(@PathVariable("idUniversite") Long idUniversite) {
-        Universite universite= universiteService.desaffecterFoyerUniversite(idUniversite);
-        return universite;
+        return universiteService.desaffecterFoyerUniversite(idUniversite);
     }
 }

@@ -1,14 +1,18 @@
 package tn.esprim.gestiondefoyer.services;
 
 import tn.esprim.gestiondefoyer.entities.Chambre;
+import tn.esprim.gestiondefoyer.entities.ChambreType;
 
 import java.util.List;
 
 public interface IChambreService {
-    public List <Chambre> retrieveAllChambres();
-    public Chambre retrieveChambre(Long chambreID);
-    public Chambre addChambre(Chambre c);
-    public void removeChambre (Long chambreID);
-    public  Chambre modifyChambre (Chambre chambre);
 
+    List<Chambre> retrieveAllChambres();
+    Chambre retrieveChambre(Long chambreID);
+    Chambre addChambre(Chambre c);
+    void removeChambre(Long chambreID);
+    Chambre modifyChambre(Chambre chambre);
+
+    List<Chambre> getChambreParNomUniversite(String nomUniversite);
+    List<Chambre> trouverChambresParBlocAndType(long idBloc, ChambreType typeC);
 }

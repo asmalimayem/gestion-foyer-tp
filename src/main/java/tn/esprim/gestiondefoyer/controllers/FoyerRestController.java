@@ -1,18 +1,18 @@
 package tn.esprim.gestiondefoyer.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprim.gestiondefoyer.entities.Foyer;
-import tn.esprim.gestiondefoyer.services.FoyerServiceImpl;
+import tn.esprim.gestiondefoyer.services.IFoyerService;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/foyer")
 public class FoyerRestController {
 
-    @Autowired
-    private FoyerServiceImpl foyerService;
+    private IFoyerService foyerService;
 
     @GetMapping("/retrieve-all-foyers")
     public List<Foyer> getFoyers() {

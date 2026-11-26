@@ -15,17 +15,27 @@ public class ReservationRestController {
     private IReservationService reservationService;
 
     @GetMapping("/retrieve-all-reservations")
-    public List<Reservation> getReservations() { return reservationService.retrieveAllReservations(); }
+    public List<Reservation> getReservations() {
+        return reservationService.retrieveAllReservations();
+    }
 
     @GetMapping("/retrieve-reservation/{reservationId}")
-    public Reservation retrieveReservation(@PathVariable Long reservationId) { return reservationService.retrieveReservation(reservationId); }
+    public Reservation retrieveReservation(@PathVariable String reservationId) {
+        return reservationService.retrieveReservation(reservationId);
+    }
 
     @PostMapping("/add-reservation")
-    public Reservation addReservation(@RequestBody Reservation r) { return reservationService.addReservation(r); }
+    public Reservation addReservation(@RequestBody Reservation r) {
+        return reservationService.addReservation(r);
+    }
 
     @DeleteMapping("/remove-reservation/{reservationId}")
-    public void removeReservation(@PathVariable Long reservationId) { reservationService.removeReservation(reservationId); }
+    public void removeReservation(@PathVariable String reservationId) {
+        reservationService.removeReservation(reservationId);
+    }
 
     @PutMapping("/modify-reservation")
-    public Reservation modifyReservation(@RequestBody Reservation r) { return reservationService.modifyReservation(r); }
+    public Reservation modifyReservation(@RequestBody Reservation r) {
+        return reservationService.modifyReservation(r);
+    }
 }

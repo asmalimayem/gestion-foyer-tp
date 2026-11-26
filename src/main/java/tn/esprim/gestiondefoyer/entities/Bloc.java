@@ -1,5 +1,6 @@
 package tn.esprim.gestiondefoyer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,12 +18,13 @@ public class Bloc {
     private long idBloc;
 
     private String nomBloc;
-
     private long capaciteBloc;
 
     @ManyToOne
+    @JsonIgnore
     private Foyer foyer;
 
-    @OneToMany(mappedBy = "bloc",cascade =CascadeType.ALL)
+    @OneToMany(mappedBy = "bloc", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Chambre> chambres;
 }

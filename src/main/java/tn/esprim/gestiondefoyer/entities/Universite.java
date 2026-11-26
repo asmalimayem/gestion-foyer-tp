@@ -1,5 +1,6 @@
 package tn.esprim.gestiondefoyer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,9 +18,9 @@ public class Universite implements Serializable {
     private long idUniversite;
 
     private String nomUniversite;
-
     private String adresse;
 
     @OneToOne(mappedBy = "universite")
+    @JsonIgnore
     private Foyer foyer;
 }

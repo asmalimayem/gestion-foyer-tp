@@ -1,12 +1,11 @@
 package tn.esprim.gestiondefoyer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -19,9 +18,10 @@ public class Reservation implements Serializable {
     private String idReservation;
 
     private String anneeUniversitaire;
-
     private boolean estValide;
-    @ManyToMany(mappedBy = "reservations", cascade = CascadeType.ALL)
-    private List<Etudiant> etudiants;
 
+    // Côté inverse -> mappedBy côté Etudiant
+    @ManyToMany(mappedBy = "reservations", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Etudiant> etudiants;
 }

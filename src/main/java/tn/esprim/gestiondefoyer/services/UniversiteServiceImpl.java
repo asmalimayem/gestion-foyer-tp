@@ -3,7 +3,6 @@ package tn.esprim.gestiondefoyer.services;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprim.gestiondefoyer.entities.Foyer;
 import tn.esprim.gestiondefoyer.entities.Universite;
@@ -15,9 +14,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UniversiteServiceImpl implements IUniversiteService {
-    @Autowired
+
     private UniversiteRepository universiteRepository;
-    @Autowired
     private FoyerRepository foyerRepository;
 
     @Override
@@ -27,7 +25,8 @@ public class UniversiteServiceImpl implements IUniversiteService {
 
     @Override
     public Universite retrieveUniversite(Long universiteId) {
-        return universiteRepository.findById(universiteId).get();
+        return universiteRepository.findById(universiteId)
+                .orElseThrow(() -> new EntityNotFoundException("Université introuvable : " + universiteId));
     }
 
     @Override
@@ -44,42 +43,40 @@ public class UniversiteServiceImpl implements IUniversiteService {
     public Universite modifyUniversite(Universite universite) {
         return universiteRepository.save(universite);
     }
+
     @Transactional
     @Override
     public Universite affecterFoyerAUniversite(Long idFoyer, String nomUniversite) {
         Foyer foyer = foyerRepository.findById(idFoyer)
-                .orElseThrow(()-> new EntityNotFoundException(
-                        "Foyer introuvable avec l'id : " + idFoyer));
+                .orElseThrow(() -> new EntityNotFoundException("Foyer introuvable : " + idFoyer));
         Universite universite = universiteRepository.findByNomUniversite(nomUniversite)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Université introuvable avec le nom : " + nomUniversite));
-        if (foyer.getUniversite()!=null){
-            throw new IllegalStateException(
-                    "le foyer " + foyer.getNomFoyer()+"est déjà affecté à une Université");
+                .orElseThrow(() -> new EntityNotFoundException("Université introuvable : " + nomUniversite));
+
+        if (foyer.getUniversite() != null) {
+            throw new IllegalStateException("Le foyer " + foyer.getNomFoyer() + " est déjà affecté à une université");
         }
-        if (universite.getFoyer() !=null){
-            throw new IllegalStateException(
-                    "l'universite " +nomUniversite+"a déjà un foer"
-            );
+        if (universite.getFoyer() != null) {
+            throw new IllegalStateException("L'université " + nomUniversite + " a déjà un foyer");
         }
+
         universite.setFoyer(foyer);
         foyer.setUniversite(universite);
         return universite;
-
     }
 
+    @Transactional
     @Override
     public Universite desaffecterFoyerUniversite(Long idUniversite) {
         Universite universite = universiteRepository.findById(idUniversite)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Université introuvable avec l'id : " + idUniversite));
-        if (universite.getFoyer()==null){
-            throw new IllegalStateException(
-                    "Aucun foyer n'est actuellement associé à l'université:"
-                            + idUniversite);
+                .orElseThrow(() -> new EntityNotFoundException("Université introuvable : " + idUniversite));
+
+        if (universite.getFoyer() == null) {
+            throw new IllegalStateException("Aucun foyer associé à l'université : " + idUniversite);
         }
-        universite.setFoyer(null);
-        return universite;    }
 
-
+        Foyer foyer = universite.getFoyer();
+        foyer.setUniversite(null);      // nettoyer côté Foyer
+        universite.setFoyer(null);      // nettoyer côté Universite
+        return universite;
+    }
 }

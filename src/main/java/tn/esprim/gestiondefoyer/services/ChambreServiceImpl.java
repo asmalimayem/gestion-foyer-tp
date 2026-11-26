@@ -1,15 +1,17 @@
 package tn.esprim.gestiondefoyer.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprim.gestiondefoyer.entities.Chambre;
+import tn.esprim.gestiondefoyer.entities.ChambreType;
 import tn.esprim.gestiondefoyer.repositories.ChambreRepository;
 
 import java.util.List;
 
 @Service
-public class ChambreServiceImpl implements IChambreService{
-    @Autowired
+@AllArgsConstructor
+public class ChambreServiceImpl implements IChambreService {
+
     private ChambreRepository chambreRepository;
 
     @Override
@@ -19,7 +21,8 @@ public class ChambreServiceImpl implements IChambreService{
 
     @Override
     public Chambre retrieveChambre(Long chambreID) {
-        return chambreRepository.findById(chambreID).get();
+        return chambreRepository.findById(chambreID)
+                .orElseThrow(() -> new RuntimeException("Chambre introuvable : " + chambreID));
     }
 
     @Override
@@ -35,5 +38,15 @@ public class ChambreServiceImpl implements IChambreService{
     @Override
     public Chambre modifyChambre(Chambre chambre) {
         return chambreRepository.save(chambre);
+    }
+
+    @Override
+    public List<Chambre> getChambreParNomUniversite(String nomUniversite) {
+        return chambreRepository.trouverChambreParNomUniversite(nomUniversite);
+    }
+
+    @Override
+    public List<Chambre> trouverChambresParBlocAndType(long idBloc, ChambreType typeC) {
+        return chambreRepository.trouverChambresParBlocAndType(idBloc, typeC);
     }
 }

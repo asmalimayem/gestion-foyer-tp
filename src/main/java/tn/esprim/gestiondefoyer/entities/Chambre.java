@@ -1,11 +1,10 @@
 package tn.esprim.gestiondefoyer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import tn.esprim.gestiondefoyer.entities.Reservation;
 
 import java.util.List;
-
 
 @Entity
 @Getter
@@ -24,8 +23,10 @@ public class Chambre {
     private ChambreType typeC;
 
     @ManyToOne
+    @JsonIgnore
     private Bloc bloc;
 
-    @OneToMany (cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Reservation> reservations;
 }
